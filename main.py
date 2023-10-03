@@ -47,7 +47,7 @@ try:
         else:
             df = pd.read_excel(uploaded_file)
         # File Information
-        st.sidebar.header("Created by Saksham ✨")
+        st.sidebar.header("Created by Tanu Maurya ✨")
         st.sidebar.subheader("File Information")
         st.sidebar.write("File Name:", uploaded_file.name)
         st.sidebar.write("Number of Rows:", df.shape[0])
