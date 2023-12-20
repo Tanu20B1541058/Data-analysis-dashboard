@@ -8,6 +8,9 @@ from scipy import stats
 from streamlit_lottie import st_lottie
 import json
 import requests
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
 
 # Set page title and description
 st.set_page_config(page_title="Data Analysis Dashboard", layout="wide")
@@ -175,6 +178,37 @@ try:
         st.dataframe(pivot_table)
 
         # Add more user-friendly visualizations and insights as desired
+        
+
+        # Linear Regression
+        st.subheader("Linear Regression Analysis")
+        
+        # Select columns for independent (X) and dependent (y) variables
+        selected_column_X = st.selectbox("Select a column for independent variable (X)", df.columns)
+        selected_column_y = st.selectbox("Select a column for dependent variable (y)", df.columns)
+        
+        # Split the dataset into training and testing sets
+        X = df[[selected_column_X]]
+        y = df[selected_column_y]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+        # Train the linear regression model
+        model = LinearRegression()
+        model.fit(X_train, y_train)
+        
+        # Make predictions
+        y_pred = model.predict(X_test)
+        
+        # Evaluate the model
+        mae = metrics.mean_absolute_error(y_test, y_pred)
+        mse = metrics.mean_squared_error(y_test, y_pred)
+        rmse = metrics.mean_squared_error(y_test, y_pred, squared=False)
+        
+        # Display metrics
+        st.write("Mean Absolute Error (MAE):", mae)
+        st.write("Mean Squared Error (MSE):", mse)
+        st.write("Root Mean Squared Error (RMSE):", rmse)
+
 
 except Exception as e:
     st.error("An error occurred: {} : Try another column for continue".format(str(e)))
